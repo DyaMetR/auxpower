@@ -22,6 +22,7 @@ local DEFAULT_CONFIG = {
   ["sv_auxpow_ep2flash_expense_mul"] = {value = 1, sv = true},
   ["cl_auxpow_drawhud"] = {value = 1},
   ["cl_auxpow_drawhudep2"] = {value = 1},
+  ["cl_auxpow_sprint_sound_enable"] = {value = 1},
   ["cl_auxpow_hudcol_r"] = {value = 255},
   ["cl_auxpow_hudcol_g"] = {value = 238},
   ["cl_auxpow_hudcol_b"] = {value = 23},
@@ -185,6 +186,14 @@ if CLIENT then
   ]]
   function AUXPOW:IsEP2HUDEnabled()
     return GetConVar("cl_auxpow_drawhudep2"):GetInt() > 0;
+  end
+
+  --[[
+    Should the sprint sounds be heard
+    @return {boolean} enabled
+  ]]
+  function AUXPOW:IsSprintSoundEnabled()
+    return GetConVar("cl_auxpow_sprint_sound_enable"):GetInt() > 0;
   end
 
   --[[

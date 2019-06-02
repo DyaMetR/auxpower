@@ -89,7 +89,7 @@ if CLIENT then
     Make it Think in case you press Shift while standing still, and then start running
   ]]
   hook.Add("Think", "auxpow_sprint_sound", function()
-    if (LocalPlayer():InVehicle()) then return; end
+    if (LocalPlayer():InVehicle() or not AUXPOW:IsSprintSoundEnabled()) then return; end
     if (LocalPlayer():IsSprinting()) then
       if (AUXPOW:GetPower() >= 0.1) then
         if (not sprinted) then
@@ -112,14 +112,14 @@ if CLIENT then
     Makes the denial sound if exhausted
   ]]
   hook.Add("KeyPress", "auxpow_exhaust", function(player, key)
-    if (LocalPlayer():Alive() and not LocalPlayer():InVehicle() and key == IN_SPEED and exhausted and not exhaustPressed) then
+    if (AUXPOW:IsSprintSoundEnabled() and LocalPlayer():Alive() and not LocalPlayer():InVehicle() and key == IN_SPEED and exhausted and not exhaustPressed) then
       LocalPlayer():EmitSound(EXHAUST_SOUND);
       exhaustPressed = true;
     end
   end);
 
   hook.Add("KeyRelease", "auxpow_exhaust_release", function(player, key)
-    if (LocalPlayer():Alive() and not LocalPlayer():InVehicle() and key == IN_SPEED and exhaustPressed) then
+    if (AUXPOW:IsSprintSoundEnabled() and LocalPlayer():Alive() and not LocalPlayer():InVehicle() and key == IN_SPEED and exhaustPressed) then
       exhaustPressed = false;
     end
   end);
