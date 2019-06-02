@@ -26,6 +26,26 @@ This addon for Garry's Mod attempts to replicate the Auxiliary Power feature fro
 ## Utilizing the API
 The public API is small, and I will only list the generally useful functions, but in case you want to take advantage of it:
 
+### Clientside
+
+`AUXPOW:GetPower()`
+> Returns the amount of power the client acknowledges the player has
+
+> **@return** {*number*} power
+
+`AUXPOW:GetFlashlight()`
+> Returns the amount of EP2 flashlight battery the client acknowledges the player has
+
+> **@return** {*number*} flashlight battery
+
+#### In case you want to override the HUD elements
+`"AuxPowerHUDPaint"` is the event that makes the default Aux. Power HUD be painted. Return **false** if you want to hide it (and draw something in it's place).
+> **@param** {*number*} auxiliary power left
+> **@param** {*table*} list of expenses
+
+`"EP2FlashlightHUDPaint"` is the event that makes the EP2 flashlight HUD be painted. Return **false** if you want to hide it (and draw something in it's place).
+> **@param** {*number*} flashlight battery left
+
 ### Serverside
 
 `AUXPOW:GetData(player)`
@@ -119,17 +139,5 @@ The public API is small, and I will only list the generally useful functions, bu
 > **@param** {*Player*} player
 
 > **@param** {*number*} amount
-
-### Clientside
-
-`AUXPOW:GetPower()`
-> Returns the amount of power the client acknowledges the player has
-
-> **@return** {*number*} power
-
-`AUXPOW:GetFlashlight()`
-> Returns the amount of EP2 flashlight battery the client acknowledges the player has
-
-> @return {number} flashlight battery
 
 ## That's all for now. Have fun!
