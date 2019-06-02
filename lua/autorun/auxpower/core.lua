@@ -29,7 +29,7 @@ if SERVER then
   --[[
     Remove timers upon disconnecting
   ]]
-  hook.Add("PlayerDisconnect", "auxpow_disconnect", function(player)
+  hook.Add("PlayerDisconnected", "auxpow_disconnect", function(player)
     AUXPOW:PlayerDisconnect(player);
   end);
 
