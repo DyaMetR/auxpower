@@ -1,6 +1,6 @@
 --[[-------------------
 H.E.V Auxiliary Power
-   Version 1.2
+   Version 1.3
      02/06/19
 By DyaMetR
 ]]---------------------

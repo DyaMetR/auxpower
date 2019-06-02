@@ -38,7 +38,7 @@ if SERVER then
     power
   ]]
   hook.Add("Move", "auxpow_sprint_move", function(player, mv)
-    if ((AUXPOW:HasPower(player) and not player.AUXPOW.exhaust) or not AUXPOW:IsSprintEnabled()) then return false; end
+    if ((AUXPOW:HasPower(player) and not player.AUXPOW.exhaust) or not AUXPOW:IsSprintEnabled()) then return; end
     mv:SetMaxSpeed(player:GetWalkSpeed());
   end);
 

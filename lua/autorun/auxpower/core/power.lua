@@ -15,7 +15,7 @@ if SERVER then
   local DEFAULT_RECOVERY_RATE = 0.09;
   local DEFAULT_PENALTY = 0.03; -- Energy taken away when adding an expense
   local DEFAULT_PENALTY_TIME = 0.3; -- Recovery penalty
-  local TIMER_NAME = "auxpow";
+  local TIMER_NAME = "_auxpow";
 
   -- Initialize network strings
   util.AddNetworkString(AUXPOW.NET.amount);
