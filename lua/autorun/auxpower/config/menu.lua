@@ -101,7 +101,7 @@ if CLIENT then
 
     -- Credits
     panel:AddControl( "Label",  { Text = ""});
-    panel:AddControl( "Label",  { Text = "Version 1.1"});
+    panel:AddControl( "Label",  { Text = "Version 1.2"});
     panel:AddControl( "Label",  { Text = ""});
   	panel:AddControl( "Label",  { Text = "Credits"});
     panel:AddControl( "Label",  { Text = "Main script: DyaMetR"});
@@ -154,6 +154,12 @@ if CLIENT then
     panel:AddControl( "CheckBox", {
   		Label = "Oxygen enabled",
   		Command = "sv_auxpow_oxygen_enabled",
+  		}
+  	);
+
+    panel:AddControl( "CheckBox", {
+  		Label = "Cap health regeneration at maximum health",
+  		Command = "sv_auxpow_oxygen_health_recovery_limit",
   		}
   	);
 

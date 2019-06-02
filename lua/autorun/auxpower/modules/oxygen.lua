@@ -79,8 +79,21 @@ if SERVER then
 
     -- Regenerate health
     if (player.AUXPOW.breathe.health > 0 and player.AUXPOW.breathe.hTick < CurTime()) then
-      player:SetHealth(player:Health() + math.min(DEFAULT_DROWN_DAMAGE_AMOUNT, player.AUXPOW.breathe.health));
-      player.AUXPOW.breathe.health = math.max(player.AUXPOW.breathe.health - DEFAULT_DROWN_DAMAGE_AMOUNT, 0);
+      local regen = math.min(DEFAULT_DROWN_DAMAGE_AMOUNT, player.AUXPOW.breathe.health);
+      local health = player:Health() + regen;
+      local breathe = math.max(player.AUXPOW.breathe.health - DEFAULT_DROWN_DAMAGE_AMOUNT, 0);
+
+      -- Is limit enabled?
+      if (AUXPOW:IsOxygenHealthRegenerationLimited()) then
+        health = math.Clamp(health, 0, player:GetMaxHealth());
+        if (health >= player:GetMaxHealth()) then
+          breathe = 0;
+        end
+      end
+
+      -- Make the health exchange
+      player:SetHealth(health);
+      player.AUXPOW.breathe.health = breathe;
 
       player.AUXPOW.breathe.hTick = CurTime() + DEFAULT_DROWN_RECOVERY_RATE;
     end

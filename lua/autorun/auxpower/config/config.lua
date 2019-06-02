@@ -12,6 +12,7 @@ local DEFAULT_CONFIG = {
   ["sv_auxpow_flashlight_ep2"] = {value = 0, sv = true, replicated = true},
   ["sv_auxpow_sprint_enabled"] = {value = 1, sv = true},
   ["sv_auxpow_oxygen_enabled"] = {value = 1, sv = true},
+  ["sv_auxpow_oxygen_health_recovery_limit"] = {value = 1, sv = true},
   ["sv_auxpow_flashlight_enabled"] = {value = 1, sv = true},
   ["sv_auxpow_recovery_mul"] = {value = 1, sv = true},
   ["sv_auxpow_expense_mul"] = {value = 1, sv = true},
@@ -106,6 +107,14 @@ if SERVER then
   ]]
   function AUXPOW:IsOxygenEnabled()
     return GetConVar("sv_auxpow_oxygen_enabled"):GetInt() > 0;
+  end
+
+  --[[
+    Should health cap to maximum amount when regenerating health?
+    @return {boolean} enabled
+  ]]
+  function AUXPOW:IsOxygenHealthRegenerationLimited()
+    return GetConVar("sv_auxpow_oxygen_health_recovery_limit"):GetInt() > 0;
   end
 
   --[[
