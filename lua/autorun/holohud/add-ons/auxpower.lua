@@ -97,12 +97,12 @@ if CLIENT and HOLOHUD ~= nil then
   ]]
   local function DrawPanel(config)
     local w, h = WIDTH, HEIGHT;
-    local x, y = ScrW() - w - 20, 20;
+    local x, y = ScrW() - w - config("x"), config("y");
 
     -- Get offset
-    if (HOLOHUD:IsPanelActive("ping")) then
-      local u, v = HOLOHUD.ELEMENTS:GetElementSize("ping");
-      y = y + v + 5;
+    local u, v = HOLOHUD.ELEMENTS:GetElementSize("ping");
+    if (HOLOHUD:IsPanelActive("ping") and y < v + 20) then
+      y = v + 25;
     end
 
     -- Extend if EP2Mode
@@ -118,6 +118,8 @@ if CLIENT and HOLOHUD ~= nil then
 
     HOLOHUD:DrawFragmentAlignSimple(x, y, w, h, DrawPower, PANEL_NAME, TEXT_ALIGN_TOP, config("colour"), config("colour_text"), config("crit_colour"), config("ep2_colour"), config("ep2_colour_text"), config("ep2_crit_colour"));
     HOLOHUD:SetPanelActive(PANEL_NAME, (auxpower < 1 or (flashlight < 1 and AUXPOW:IsEP2Mode())) and AUXPOW:IsEnabled());
+
+    return w, h;
   end
 
   -- Add element
@@ -131,7 +133,9 @@ if CLIENT and HOLOHUD ~= nil then
       crit_colour = { name = "Aux. power critical colour", value = Color(255, 88, 88) },
       ep2_colour = { name = "Flashlight colour", value = Color(200, 180, 80)},
       ep2_colour_text = { name = "Flashlight text colour", value = Color(255, 255, 255)},
-      ep2_crit_colour = { name = "Flashlight critical colour", value = Color(255, 0, 0)}
+      ep2_crit_colour = { name = "Flashlight critical colour", value = Color(255, 0, 0)},
+      x = { name = "Horizontal offset", value = 20, minValue = 0, maxValue = ScrW() },
+      y = { name = "Vertical offset", value = 20, minValue = 0, maxValue = ScrW() }
     },
     DrawPanel
   );
