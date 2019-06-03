@@ -36,58 +36,29 @@ if CLIENT and HOLOHUD ~= nil then
     @param {number} y
     @param {number} w
     @param {number} h
+    @param {number} mode
+    @param {Color} colour
+    @param {Color} text colour
+    @param {Color} critical colour
   ]]
-  local function DrawPower(x, y, w, h, auxCol, auxColText, auxColCrit)
+  local function DrawPower(x, y, w, h, mode, auxCol, auxColText, auxColCrit)
     -- Animate colour fade in/out
-    local c = 1;
-    if (auxpower < 0.2) then c = 0; end
-    colour1 = Lerp(FrameTime() * 6, colour1, c);
-
-    c = 1;
-    if (flashlight < 0.2) then c = 0; end
-    colour2 = Lerp(FrameTime() * 6, colour2, c);
+    local col = 1;
+    if (auxpower < 0.2) then col = 0; end
+    colour1 = Lerp(FrameTime() * 6, colour1, col);
 
     -- Draw aux. power indicator
     local colour = HOLOHUD:IntersectColour(auxCol, auxColCrit, colour1);
     local textColour = HOLOHUD:IntersectColour(auxColText, auxColCrit, colour1);
     HOLOHUD:DrawTexture(OUTLINE_TEXTURE, x + w - 34, y + 4, 32, 32, Color(100, 100, 100));
-    HOLOHUD:DrawProgressTexture(x + w - 34, y + 4, BATTERY_TEXTURE, BRIGHT_TEXTURE, 32, 32, 32, auxpower, nil, colour, TEXT_ALIGN_BOTTOM, nil, true);
-    HOLOHUD:DrawNumber(x + 7, y + 19, math.max(math.Round(auxpower * 100), 0), textColour, nil, nil, "holohud_small");
-    --[[
-    -- Draw flashlight
-    if (AUXPOW:IsEP2Mode()) then
-      if (flashlight < 1) then last = 1; end
-      if (last == 1) then
-        local textColour = HOLOHUD:IntersectColour(flashColText, flashColCrit, colour2);
-        local colour = HOLOHUD:IntersectColour(flashCol, flashColCrit, colour2);
-        local a, b = x, y;
-        local u1, u2 = 43, 28;
-        local iconFont = FONT_NAME;
 
-        -- If it's flashlight only, make it bigger
-        if (auxpower >= 1) then
-          iconFont = FONT_NAME_BIG;
-          a = x + 4;
-          b = y + 3;
-          u1, u2 = 56, 40;
-          HOLOHUD:DrawNumber(x + 10, y + (h * 0.5), math.max(math.Round(flashlight * 100), 0), textColour, nil, nil, "holohud_small", nil, nil, TEXT_ALIGN_CENTER);
-        else
-          HOLOHUD:DrawNumber(x + 10, y + h - 14, math.max(math.Round(flashlight * 100), 0), textColour, nil, nil, "holohud_tiny");
-        end
+    local alpha = 1;
+    if (auxpower <= 0) then alpha = 0; end
+    HOLOHUD:DrawProgressTexture(x + w - 34, y + 4, BATTERY_TEXTURE, BRIGHT_TEXTURE, 32, 32, 28, auxpower, nil, Color(colour.r, colour.g, colour.b, colour.a * alpha), TEXT_ALIGN_BOTTOM, nil, true);
 
-        -- Draw icon
-        local u, v = a + w + 2, b + h + 8;
-        local alpha = 133;
-        if (LocalPlayer():FlashlightIsOn()) then alpha = 255; end
-        -- Background
-        HOLOHUD:DrawText(u, v, "®", iconFont, colour, nil, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, nil, alpha * 0.5);
-
-        -- Foreground
-        render.SetScissorRect(x + u1, y, x + u1 + u2 * (flashlight), y + h, true);
-        HOLOHUD:DrawText(u, v, "®", iconFont, colour, nil, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, nil, alpha);
-        render.SetScissorRect(0, 0, 0, 0, false);
-      end
-    end]]
+    if (mode <= 1) then
+      HOLOHUD:DrawNumber(x + 7, y + 19, math.max(math.Round(auxpower * 100), 0), textColour, nil, nil, "holohud_small");
+    end
   end
 
   --[[
@@ -96,16 +67,29 @@ if CLIENT and HOLOHUD ~= nil then
     @param {number} y
     @param {number} w
     @param {number} h
+    @param {number} mode
+    @param {Color} colour
+    @param {Color} text colour
+    @param {Color} critical colour
   ]]
-  local function DrawFlashlight(x, y, w, h, flashCol, flashColText, flashColCrit)
+  local function DrawFlashlight(x, y, w, h, mode, flashCol, flashColText, flashColCrit)
+    -- Animate colour fade in/out
+    local c = 1;
+    if (flashlight < 0.2) then c = 0; end
+    colour2 = Lerp(FrameTime() * 6, colour2, c);
+
+    -- Draw flashlight
     local textColour = HOLOHUD:IntersectColour(flashColText, flashColCrit, colour2);
     local colour = HOLOHUD:IntersectColour(flashCol, flashColCrit, colour2);
 
     -- Draw number
-    HOLOHUD:DrawNumber(x + 8, y + (h * 0.5) - 1, math.max(math.Round(flashlight * 100), 0), textColour, nil, nil, "holohud_small", nil, nil, TEXT_ALIGN_CENTER);
+    if (mode <= 1) then
+      HOLOHUD:DrawNumber(x + 8, y + (h * 0.5) - 1, math.max(math.Round(flashlight * 100), 0), textColour, nil, nil, "holohud_small", nil, nil, TEXT_ALIGN_CENTER);
+    end
 
     -- Draw icon
     local u1, u2 = 56, 40;
+    if (mode >= 2) then u1 = 9; end
     local u, v = x + w + 5, y + 14;
     local alpha = 133;
     if (LocalPlayer():FlashlightIsOn()) then alpha = 255; end
@@ -123,12 +107,16 @@ if CLIENT and HOLOHUD ~= nil then
     @param {table} configuration
   ]]
   local function DrawPanel(config)
-    -- Aux. power offset
+    -- Aux. power
     local w, h = WIDTH, HEIGHT;
+    local mode = config("mode");
+    if (mode >= 2) then w = 36; end
     local x, y = ScrW() - w - config("x"), config("y");
 
-    -- Flashlight offset
+    -- Flashlight
     local fW, fH = FWIDTH, FHEIGHT;
+    local fMode = config("flashMode");
+    if (fMode >= 2) then fW = fW - (HOLOHUD:GetNumberSize(3, "holohud_small") + 8); end
     local fX, fY = ScrW() - fW - config("fX"), config("fY");
 
     local u, v = HOLOHUD.ELEMENTS:GetElementSize("ping");
@@ -150,22 +138,17 @@ if CLIENT and HOLOHUD ~= nil then
       end
     end
 
-    -- Extend if EP2Mode
-    --[[if (AUXPOW:IsEP2Mode() and (last == 1 or flashlight < 1)) then
-      if (auxpower < 1) then
-        h = h + 20;
-      else
-        h = 35;
-        w = 105;
-        x = ScrW() - w - 20;
-      end
-    end]]
-
-    HOLOHUD:DrawFragmentAlignSimple(x, y, w, h, DrawPower, PANEL_NAME, TEXT_ALIGN_TOP, config("colour"), config("colour_text"), config("crit_colour"));
+    -- Draw aux. power
+    local a1 = nil;
+    if (mode >= 3) then a1 = 0; end
+    HOLOHUD:DrawFragmentAlign(x, y, w, h, DrawPower, PANEL_NAME, TEXT_ALIGN_TOP, nil, a1, nil,  mode, config("colour"), config("colour_text"), config("crit_colour"));
     HOLOHUD:SetPanelActive(PANEL_NAME, auxpower < 1 and AUXPOW:IsEnabled());
 
+    -- Draw hl2ep2 flashlight
+    local a2 = nil;
+    if (fMode >= 3) then a2 = 0; end
     HOLOHUD:SetPanelActive(EP2_PANEL, flashlight < 1 and AUXPOW:IsEP2Mode() and AUXPOW:IsEnabled());
-    HOLOHUD:DrawFragmentAlignSimple(fX, fY, fW, fH, DrawFlashlight, EP2_PANEL, TEXT_ALIGN_TOP, config("ep2_colour"), config("ep2_colour_text"), config("ep2_crit_colour"));
+    HOLOHUD:DrawFragmentAlign(fX, fY, fW, fH, DrawFlashlight, EP2_PANEL, TEXT_ALIGN_TOP, nil, a2, nil, fMode, config("ep2_colour"), config("ep2_colour_text"), config("ep2_crit_colour"));
 
     return w, h;
   end
@@ -185,7 +168,9 @@ if CLIENT and HOLOHUD ~= nil then
       x = { name = "Horizontal offset", value = 20, minValue = 0, maxValue = ScrW() },
       y = { name = "Vertical offset", value = 20, minValue = 0, maxValue = ScrW() },
       fX = { name = "Flashlight hor. offset", value = 20, minValue = 0, maxValue = ScrW() },
-      fY = { name = "Flashlight ver. offset", value = 20, minValue = 0, maxValue = ScrW() }
+      fY = { name = "Flashlight ver. offset", value = 20, minValue = 0, maxValue = ScrW() },
+      mode = { name = "Aux. power mode", options = {"Default", "Icon with background", "Icon only"}, value = 1},
+      flashMode = { name = "Flashlight mode", options = {"Default", "Icon with background", "Icon only"}, value = 1}
     },
     DrawPanel
   );

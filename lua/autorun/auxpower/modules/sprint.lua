@@ -24,12 +24,21 @@ if SERVER then
   end
 
   --[[
+    Returns whether a player can sprint
+    @param {Player} player
+    @return {boolean} can sprint
+  ]]
+  local function CanSprint(player)
+    return (AUXPOW:HasPower(player) and not player.AUXPOW.exhaust) or not AUXPOW:IsSprintEnabled();
+  end
+
+  --[[
     Send to the client whether they can sprint or not
     @param {Player} player
   ]]
   local function UpdateCanSprint(player)
     net.Start(NET);
-    net.WriteBool((AUXPOW:HasPower(player) and not player.AUXPOW.exhaust) or not AUXPOW:IsSprintEnabled());
+    net.WriteBool(CanSprint(player));
     net.Send(player);
   end
 
@@ -38,7 +47,7 @@ if SERVER then
     power
   ]]
   hook.Add("Move", "auxpow_sprint_move", function(player, mv)
-    if ((AUXPOW:HasPower(player) and not player.AUXPOW.exhaust) or not AUXPOW:IsSprintEnabled()) then return; end
+    if (CanSprint(player)) then return; end
     mv:SetMaxSpeed(player:GetWalkSpeed());
   end);
 
@@ -69,6 +78,15 @@ if SERVER then
   ]]
   hook.Add("AuxPowerInitialize", "auxpow_sprint_init", function(player)
     player.AUXPOW.exhaust = false;
+
+    -- Address CW 2.0 conflicts
+    -- CW 2.0
+    if (CW_Move ~= nil) then
+      hook.Add("Move", "CW_Move", function(ply, mv)
+        if (not CanSprint(player)) then return; end
+        CW_Move(ply, mv);
+      end);
+    end
   end);
 
 end
@@ -128,7 +146,7 @@ if CLIENT then
     Predicts movement based on whether the player can sprint or not
   ]]
   hook.Add("Move", "auxpow_sprint_predict", function(player, mv)
-    if (canSprint) then return false; end
+    if (canSprint) then return; end
     mv:SetMaxSpeed(player:GetWalkSpeed());
   end);
 
