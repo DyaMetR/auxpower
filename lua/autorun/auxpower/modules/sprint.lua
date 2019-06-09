@@ -55,7 +55,7 @@ if SERVER then
     Runs the sprinting logic
   ]]
   hook.Add("AuxPowerTick", "auxpow_sprint", function(player)
-    if (not AUXPOW:IsSprintEnabled()) then AUXPOW:RemoveExpense(player, ID); return; end
+    if (not AUXPOW:IsSprintEnabled() or player:GetMoveType() == MOVETYPE_NOCLIP) then AUXPOW:RemoveExpense(player, ID); return; end
     -- Temporaly disable player ability to sprint if it's exhausted
     if (not AUXPOW:HasPower(player) and not player.AUXPOW.exhaust) then
       player.AUXPOW.exhaust = true;
