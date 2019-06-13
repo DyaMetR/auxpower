@@ -83,7 +83,7 @@ if SERVER then
     -- CW 2.0
     if (CW_Move ~= nil) then
       hook.Add("Move", "CW_Move", function(ply, mv)
-        if (not CanSprint(player)) then return; end
+        if (not CanSprint(player) or ply:Crouching()) then return; end
         CW_Move(ply, mv);
       end);
     end
