@@ -21,6 +21,7 @@ local DEFAULT_CONFIG = {
   ["sv_auxpow_flashlight_mul"] = {value = 1, sv = true},
   ["sv_auxpow_ep2flash_recovery_mul"] = {value = 1, sv = true},
   ["sv_auxpow_ep2flash_expense_mul"] = {value = 1, sv = true},
+  ["sv_auxpow_need_suit"] = {value = 1, sv = true, replicated = true},
   ["cl_auxpow_drawhud"] = {value = 1},
   ["cl_auxpow_drawhudep2"] = {value = 1},
   ["cl_auxpow_sprint_sound_enable"] = {value = 1},
@@ -74,6 +75,15 @@ end
 ]]
 function AUXPOW:IsEP2Mode()
   return GetConVar("sv_auxpow_flashlight_ep2"):GetInt() > 0;
+end
+
+--[[
+  Returns whether the suit is equipped if it's required
+  @param {Player} player
+  @return {boolean} is suit equipped
+]]
+function AUXPOW:IsSuitEquipped(player)
+  return (player:IsSuitEquipped() and GetConVar("sv_auxpow_need_suit"):GetInt() > 0) or GetConVar("sv_auxpow_need_suit"):GetInt() <= 0;
 end
 
 if SERVER then

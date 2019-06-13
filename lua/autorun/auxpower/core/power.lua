@@ -145,6 +145,7 @@ if SERVER then
     @param {Player} player
   ]]
   function AUXPOW:PlayerTick(player)
+    if (not AUXPOW:IsSuitEquipped(player)) then player.AUXPOW.power = 1; return; end
     if (AUXPOW:HasExpenses(player)) then
       for _, expense in pairs(AUXPOW:GetExpenses(player)) do
         if (expense.tick < CurTime()) then

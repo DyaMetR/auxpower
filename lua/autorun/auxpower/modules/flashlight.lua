@@ -89,7 +89,7 @@ if SERVER then
   ]]
   local function EpisodeFlashlight(player)
     AUXPOW:RemoveExpense(player, ID);
-    if (player.AUXPOW.flashlight.tick < CurTime()) then
+    if (player.AUXPOW.flashlight.tick < CurTime() and not (player:FlashlightIsOn() and AUXPOW:GetEP2ExpenseMul() <= 0) and not (not player:FlashlightIsOn() and AUXPOW:GetEP2RecoveryMul() <= 0)) then
       if (player:FlashlightIsOn()) then
         AUXPOW:AddFlashlightPower(player, -0.01);
         player.AUXPOW.flashlight.tick = CurTime() + DEFAULT_EP2_RATE / AUXPOW:GetEP2ExpenseMul();
@@ -105,6 +105,22 @@ if SERVER then
     flashlight supply
   ]]
   hook.Add("AuxPowerTick", "auxpow_flashlight", function(player)
+    -- Disable flashlight if the suit is required and the player doesn't have it
+    if (not AUXPOW:IsSuitEquipped(player)) then
+      if (player:CanUseFlashlight()) then
+        if (player:FlashlightIsOn()) then
+          player:Flashlight(false);
+        end
+        player:AllowFlashlight(false);
+      end
+      return;
+    else
+      if (not player:CanUseFlashlight()) then
+        player:AllowFlashlight(true);
+      end
+    end
+
+    -- If the player can use the flashlight, carry on
     if (AUXPOW:IsEP2Mode()) then
       EpisodeFlashlight(player);
     else
@@ -220,7 +236,7 @@ if CLIENT then
   ]]
   hook.Add("HUDPaint", "auxpow_flashlight_hud", function()
     local shouldDraw = hook.Run("EP2FlashlightHUDPaint", power) ~= true;
-    if (AUXPOW:IsEnabled() and shouldDraw and AUXPOW:IsEP2HUDEnabled() and AUXPOW:IsEP2Mode() and GetConVar("cl_drawhud"):GetInt() > 0) then
+    if (AUXPOW:IsEnabled() and shouldDraw and AUXPOW:IsEP2HUDEnabled() and AUXPOW:IsEP2Mode() and GetConVar("cl_drawhud"):GetInt() > 0 and LocalPlayer():IsSuitEquipped()) then
       local x, y = AUXPOW:GetEP2HUDPos();
       AUXPOW:DrawFlashlightHUD(math.Round(x * AUXPOW:GetScale()), ScrH() - math.Round(y * AUXPOW:GetScale()));
     end

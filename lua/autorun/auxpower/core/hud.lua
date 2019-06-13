@@ -185,7 +185,7 @@ if CLIENT then
   ]]
   hook.Add("HUDPaint", "auxpow_drawhud", function()
     local shouldDraw = hook.Run("AuxPowerHUDPaint", power, labels) ~= true;
-    if (AUXPOW:IsEnabled() and shouldDraw and AUXPOW:IsHUDEnabled() and GetConVar("cl_drawhud"):GetInt() > 0) then
+    if (AUXPOW:IsEnabled() and shouldDraw and AUXPOW:IsHUDEnabled() and GetConVar("cl_drawhud"):GetInt() > 0 and LocalPlayer():IsSuitEquipped()) then
       local x, y = AUXPOW:GetHUDPos();
       AUXPOW:DrawHUDPanel(x * AUXPOW:GetScale(), ScrH() - (y * AUXPOW:GetScale()));
     end

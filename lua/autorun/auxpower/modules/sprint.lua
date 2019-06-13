@@ -29,7 +29,7 @@ if SERVER then
     @return {boolean} can sprint
   ]]
   local function CanSprint(player)
-    return (AUXPOW:HasPower(player) and not player.AUXPOW.exhaust) or not AUXPOW:IsSprintEnabled();
+    return (AUXPOW:HasPower(player) and not player.AUXPOW.exhaust and AUXPOW:IsSuitEquipped(player)) or not AUXPOW:IsSprintEnabled();
   end
 
   --[[
@@ -107,7 +107,7 @@ if CLIENT then
     Make it Think in case you press Shift while standing still, and then start running
   ]]
   hook.Add("Think", "auxpow_sprint_sound", function()
-    if (LocalPlayer():InVehicle() or not AUXPOW:IsSprintSoundEnabled()) then return; end
+    if (LocalPlayer():InVehicle() or not AUXPOW:IsSprintSoundEnabled() or not AUXPOW:IsSuitEquipped(LocalPlayer())) then return; end
     if (LocalPlayer():IsSprinting()) then
       if (AUXPOW:GetPower() >= 0.1) then
         if (not sprinted) then
@@ -146,7 +146,7 @@ if CLIENT then
     Predicts movement based on whether the player can sprint or not
   ]]
   hook.Add("Move", "auxpow_sprint_predict", function(player, mv)
-    if (canSprint) then return; end
+    if (canSprint and AUXPOW:IsSuitEquipped(LocalPlayer())) then return; end
     mv:SetMaxSpeed(player:GetWalkSpeed());
   end);
 

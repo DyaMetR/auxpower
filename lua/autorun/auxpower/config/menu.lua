@@ -207,6 +207,12 @@ if CLIENT then
       Command = "sv_auxpow_ep2flash_expense_mul"}
     );
 
+    panel:AddControl( "CheckBox", {
+  		Label = "Is the Suit required for its functions to work",
+  		Command = "sv_auxpow_need_suit",
+  		}
+  	);
+
     panel:AddControl( "Button", {
   		Label = "Reset settings to default",
   		Command = "sv_auxpow_reset",

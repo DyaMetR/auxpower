@@ -34,6 +34,17 @@ if SERVER then
   end
 
   --[[
+    Regenerates a player's own oxygen reserve
+    @param {Player} player
+  ]]
+  local function RegenerateOxygen(player)
+    if (player.AUXPOW.breathe.tick < CurTime()) then
+      player.AUXPOW.breathe.oxygen = math.Clamp(player.AUXPOW.breathe.oxygen + 0.03, 0, 1);
+      player.AUXPOW.breathe.tick = CurTime() + DEFAULT_SUPPLY_RATE;
+    end
+  end
+
+  --[[
     Adds a power expense and drowns the player if it gets depleted
     @param {Player} player
   ]]
@@ -42,7 +53,7 @@ if SERVER then
     AUXPOW:AddExpense(player, ID, LABEL, DEFAULT_SUPPLY_RATE / AUXPOW:GetOxygenMul(), nil, DEFAULT_DOWNTIME);
 
     -- If depleted, damage player
-    if (not AUXPOW:HasPower(player)) then
+    if (not AUXPOW:HasPower(player) or not AUXPOW:IsSuitEquipped(player)) then
 
       -- Timed loop for oxygen depletion
       if (player.AUXPOW.breathe.tick < CurTime()) then
@@ -60,6 +71,9 @@ if SERVER then
           player.AUXPOW.breathe.tick = CurTime() + DEFAULT_DROWN_DAMAGE_RATE; -- Next damage tick
         end
       end
+    else
+      -- Regenerate oxygen
+      RegenerateOxygen(player);
     end
   end
 
@@ -72,10 +86,7 @@ if SERVER then
     AUXPOW:RemoveExpense(player, ID);
 
     -- Regenerate oxygen
-    if (player.AUXPOW.breathe.tick < CurTime()) then
-      player.AUXPOW.breathe.oxygen = math.Clamp(player.AUXPOW.breathe.oxygen + 0.03, 0, 1);
-      player.AUXPOW.breathe.tick = CurTime() + DEFAULT_SUPPLY_RATE;
-    end
+    RegenerateOxygen(player);
 
     -- Regenerate health
     if (player.AUXPOW.breathe.health > 0 and player.AUXPOW.breathe.hTick < CurTime()) then
