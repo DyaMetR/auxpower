@@ -29,7 +29,7 @@ if SERVER then
     @return {boolean} can sprint
   ]]
   local function CanSprint(player)
-    return (AUXPOW:HasPower(player) and not player.AUXPOW.exhaust and AUXPOW:IsSuitEquipped(player)) or not AUXPOW:IsSprintEnabled();
+    return IsValid(player) and (AUXPOW:HasPower(player) and not player.AUXPOW.exhaust and AUXPOW:IsSuitEquipped(player)) or not AUXPOW:IsSprintEnabled();
   end
 
   --[[
@@ -47,7 +47,7 @@ if SERVER then
     power
   ]]
   hook.Add("Move", "auxpow_sprint_move", function(player, mv)
-    if (CanSprint(player)) then return; end
+    if (CanSprint(player) or player:Crouching()) then return; end
     mv:SetMaxSpeed(player:GetWalkSpeed());
   end);
 
@@ -83,7 +83,7 @@ if SERVER then
     -- CW 2.0
     if (CW_Move ~= nil) then
       hook.Add("Move", "CW_Move", function(ply, mv)
-        if (not CanSprint(player) or ply:Crouching()) then return; end
+        if (not IsValid(ply) or not CanSprint(player) or ply:Crouching()) then return; end
         CW_Move(ply, mv);
       end);
     end
@@ -146,7 +146,7 @@ if CLIENT then
     Predicts movement based on whether the player can sprint or not
   ]]
   hook.Add("Move", "auxpow_sprint_predict", function(player, mv)
-    if (canSprint and AUXPOW:IsSuitEquipped(LocalPlayer())) then return; end
+    if (canSprint and AUXPOW:IsSuitEquipped(LocalPlayer()) or player:Crouching()) then return; end
     mv:SetMaxSpeed(player:GetWalkSpeed());
   end);
 

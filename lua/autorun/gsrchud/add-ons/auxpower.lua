@@ -31,7 +31,7 @@ if CLIENT and GSRCHUD ~= nil then
 
     -- Draw flashlight
     GSRCHUD:DrawSprite(x, y, "flash_empty", GSRCHUD:GetHUDScale(), nil, flashlight <= 0.25);
-    GSRCHUD:DrawSprite(x, y, "flash_full", GSRCHUD:GetHUDScale(), alpha * 255, flashlight <= 0.25, nil, nil, nil, true, flashlight);
+    GSRCHUD:DrawSprite(x, y, "flash_full", GSRCHUD:GetHUDScale(), alpha * 255, flashlight <= 0.25, nil, nil, nil, true, flashlight, true);
   end
 
   GSRCHUD:AddElement(Flashlight);
