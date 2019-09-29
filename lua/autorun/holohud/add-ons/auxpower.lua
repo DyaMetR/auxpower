@@ -14,8 +14,8 @@ if CLIENT and HOLOHUD ~= nil then
   local BATTERY_TEXTURE = surface.GetTextureID("auxpower/holohud/ic_batt");
   local BRIGHT_TEXTURE = surface.GetTextureID("auxpower/holohud/ic_batt_b");
   local HORIZONTAL_OFFSET, VERTICAL_OFFSET = 20, 20;
-  local WIDTH, HEIGHT = 83, 40;
-  local FWIDTH, FHEIGHT = 105, 35;
+  local WIDTH, HEIGHT = 45, 40;
+  local FWIDTH, FHEIGHT = 68, 35;
 
   -- Variables
   local auxpower = 1;
@@ -57,7 +57,7 @@ if CLIENT and HOLOHUD ~= nil then
     HOLOHUD:DrawProgressTexture(x + w - 34, y + 4, BATTERY_TEXTURE, BRIGHT_TEXTURE, 32, 32, 28, auxpower, nil, Color(colour.r, colour.g, colour.b, colour.a * alpha), TEXT_ALIGN_BOTTOM, nil, true);
 
     if (mode <= 1) then
-      HOLOHUD:DrawNumber(x + 7, y + 19, math.max(math.Round(auxpower * 100), 0), textColour, nil, nil, "holohud_small");
+      HOLOHUD:DrawNumber(x + 8, y + 20, math.max(math.Round(auxpower * 100), 0), textColour, nil, nil, "holohud_small");
     end
   end
 
@@ -88,7 +88,7 @@ if CLIENT and HOLOHUD ~= nil then
     end
 
     -- Draw icon
-    local u1, u2 = 56, 40;
+    local u1, u2 = w - 50, 40;
     if (mode >= 2) then u1 = 9; end
     local u, v = x + w + 5, y + 14;
     local alpha = 133;
@@ -108,15 +108,15 @@ if CLIENT and HOLOHUD ~= nil then
   ]]
   local function DrawPanel(config)
     -- Aux. power
-    local w, h = WIDTH, HEIGHT;
+    local w, h = HOLOHUD:GetNumberSize(3, "holohud_small") + WIDTH, HEIGHT;
     local mode = config("mode");
     if (mode >= 2) then w = 36; end
     local x, y = ScrW() - w - config("x"), config("y");
 
     -- Flashlight
-    local fW, fH = FWIDTH, FHEIGHT;
+    local fW, fH = HOLOHUD:GetNumberSize(3, "holohud_small") + FWIDTH, FHEIGHT;
     local fMode = config("flashMode");
-    if (fMode >= 2) then fW = fW - (HOLOHUD:GetNumberSize(3, "holohud_small") + 8); end
+    if (fMode >= 2) then fW = FWIDTH - 8; end
     local fX, fY = ScrW() - fW - config("fX"), config("fY");
 
     local u, v = HOLOHUD.ELEMENTS:GetElementSize("ping");

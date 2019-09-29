@@ -1,13 +1,13 @@
 --[[-------------------
 H.E.V Auxiliary Power
-   Version 1.5.6
-     24/06/19
+   Version 1.5.7
+     29/09/19
 By DyaMetR
 ]]---------------------
 
 -- Main framework table
 AUXPOW = {};
-AUXPOW.Version = "1.5.6";
+AUXPOW.Version = "1.5.7";
 
 --[[
   METHODS
