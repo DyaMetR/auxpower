@@ -6,7 +6,7 @@
 if CLIENT then
 
   -- Parameters
-  local LABEL = "AUX. POWER";
+  local LABEL = "AUX POWER";
   local WIDTH, HEIGHT = 163, 41;
   local EXPENSE_HEIGHT = 16;
   local HORIZONTAL_OFFSET, VERTICAL_OFFSET = 25, 87;
