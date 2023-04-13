@@ -14,7 +14,7 @@ if SERVER then
   local DEFAULT_DOWNTIME = 0.5;
   local DEFAULT_EP2_RATE = 1.23;
   local DEFAULT_EP2_RECOVERY_RATE = 0.01;
-  local ID, LABEL = "flashlight", "FLASHLIGHT";
+  local ID, LABEL = "flashlight", "#Valve_Hud_FLASHLIGHT";
 
   --[[
     Adds an expense when the flashlight is turned on, and turns it off in
@@ -225,7 +225,7 @@ if CLIENT then
     local w, h = math.floor(FWIDTH * AUXPOW:GetScale()), math.floor(FHEIGHT * AUXPOW:GetScale());
     y = y - h;
     Animate();
-    draw.RoundedBox(6, x, y, w, h, Color(0, 0, 0, 80));
+    draw.RoundedBox(6, x, y, w, h, Color(0, 0, 0, AUXPOW:GetHUDBackgroundOpacity()));
     AUXPOW:DrawBar(x + 7 * AUXPOW:GetScale(), y + 29 * AUXPOW:GetScale(), 3, 3, 1, 10, power, GetColour(), barAlpha, 0.3);
     DrawFlashlightIcon(x + w * 0.51, y - h * 0.35, LocalPlayer():FlashlightIsOn(), nil, nil, TEXT_ALIGN_CENTER);
   end

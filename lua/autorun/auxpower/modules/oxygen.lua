@@ -12,7 +12,7 @@ if SERVER then
   local DEFAULT_DROWN_RECOVERY_RATE = 2;
   local DEFAULT_DROWN_DAMAGE_AMOUNT = 10;
   local DEFAULT_DOWNTIME = 1.2;
-  local ID, LABEL = "oxygen", "OXYGEN";
+  local ID, LABEL = "oxygen", "#Valve_Hud_OXYGEN";
 
   --[[
     Damages the player by drowning

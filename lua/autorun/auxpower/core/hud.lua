@@ -6,7 +6,7 @@
 if CLIENT then
 
   -- Parameters
-  local LABEL = "AUX POWER";
+  local LABEL = "#Valve_Hud_AUX_POWER";
   local WIDTH, HEIGHT = 163, 41;
   local EXPENSE_HEIGHT = 16;
   local HORIZONTAL_OFFSET, VERTICAL_OFFSET = 25, 87;
@@ -161,7 +161,7 @@ if CLIENT then
     Animate();
 
     -- Background
-    draw.RoundedBox(6, x, y, w, h, Color(0, 0, 0, 80 * alpha));
+    draw.RoundedBox(6, x, y, w, h, Color(0, 0, 0, AUXPOW:GetHUDBackgroundOpacity() * alpha));
 
     -- Title
     draw.SimpleText(LABEL, "auxpow", x + (13 * AUXPOW:GetScale()), y + (5 * AUXPOW:GetScale()), GetColour());

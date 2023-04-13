@@ -25,6 +25,7 @@ local DEFAULT_CONFIG = {
   ["cl_auxpow_drawhud"] = {value = 1},
   ["cl_auxpow_drawhudep2"] = {value = 1},
   ["cl_auxpow_sprint_sound_enable"] = {value = 1},
+  ["cl_auxpow_background"] = {value = 76},
   ["cl_auxpow_hudcol_r"] = {value = 255},
   ["cl_auxpow_hudcol_g"] = {value = 238},
   ["cl_auxpow_hudcol_b"] = {value = 23},
@@ -263,6 +264,14 @@ if CLIENT then
   ]]
   function AUXPOW:GetEP2HUDCritColour()
     return Color(GetConVar("cl_auxpow_ep2col_crit_r"):GetInt(), GetConVar("cl_auxpow_ep2col_crit_g"):GetInt(), GetConVar("cl_auxpow_ep2col_crit_b"):GetInt());
+  end
+
+  --[[
+    Returns the HUD background opacity
+    @return {Color} colour
+  ]]
+  function AUXPOW:GetHUDBackgroundOpacity()
+    return GetConVar('cl_auxpow_background'):GetInt();
   end
 
   --[[

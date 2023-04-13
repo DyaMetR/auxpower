@@ -39,6 +39,14 @@ if CLIENT then
       Command = "cl_auxpow_hudpos_y"}
     );
 
+    panel:AddControl( "Slider", {
+      Label = "Aux. power background opacity",
+      Type = "Integer",
+      Min = 0,
+      Max = 255,
+      Command = "cl_auxpow_background"}
+    );
+
     panel:AddControl( "Color", {
       Label = "Aux. power colour",
       Red = "cl_auxpow_hudcol_r",
@@ -224,10 +232,9 @@ if CLIENT then
   --[[
     Add options to the Q menu
   ]]
-  local function menuCreation()
-  	spawnmenu.AddToolMenuOption( "Options", "DyaMetR", "cl_AUXPOW", "Auxiliary power", "", "", clientOptions );
-    spawnmenu.AddToolMenuOption( "Utilities", "DyaMetR", "sv_AUXPOW", "Auxiliary power", "", "", serverOptions );
-  end
-  hook.Add( "PopulateToolMenu", "auxpow_menu", menuCreation );
+  hook.Add( "PopulateToolMenu", "auxpow_menu", function()
+    spawnmenu.AddToolMenuOption( "Utilities", "Auxiliary Power", "auxpow_cl", "Client Settings", "", "", clientOptions );
+    spawnmenu.AddToolMenuOption( "Utilities", "Auxiliary Power", "auxpow_sv", "Server Settings", "", "", serverOptions );
+  end);
 
 end

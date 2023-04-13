@@ -1,13 +1,13 @@
---[[-------------------
-H.E.V Auxiliary Power
-   Version 1.6.1
-     09/05/20
-By DyaMetR
-]]---------------------
+--[[------------------------------------------------------------------
+  H.E.V Mark V Auxiliary Power
+  Version 1.7
+  April 13th, 2023
+  Made by DyaMetR
+]]--------------------------------------------------------------------
 
 -- Main framework table
 AUXPOW = {};
-AUXPOW.Version = "1.6.1";
+AUXPOW.Version = "1.7";
 
 --[[
   METHODS

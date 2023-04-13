@@ -12,7 +12,7 @@ if SERVER then
   -- Parameters
   local DEFAULT_SPRINT_RATE = 0.09;
   local DEFAULT_DOWNTIME = 1;
-  local ID, LABEL = "sprint", "SPRINT";
+  local ID, LABEL = "sprint", "#Valve_Hud_SPRINT";
 
   --[[
     Returns whether a player is using any movement based input

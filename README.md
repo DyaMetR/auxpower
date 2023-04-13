@@ -19,10 +19,6 @@ This addon for Garry's Mod attempts to replicate the Auxiliary Power feature fro
 +   Change rates of energy consumption and recovery globally
 +   Change rates of energy consumption and recovery per feature
 
-## Additional content
-+   Support for **H0L-D4: Holographic Heads up Display**
-+   Support for **GoldSrc HUD**
-
 ## Utilizing the API
 The public API is small, and I will only list the generally useful functions, but in case you want to take advantage of it:
 
